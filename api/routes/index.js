@@ -1,9 +1,9 @@
 const bodyParser = require('body-parser')
+const people = require('./peopleRoute')
 
 module.exports = app => {
     app.use(bodyParser.json())
 
-    app.get('/', (req, res) => {
-        res.send('Hi!')
-    })
+    app.use(people)
+
 }
