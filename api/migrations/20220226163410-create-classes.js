@@ -11,6 +11,16 @@ module.exports = {
       start_date: {
         type: Sequelize.DATEONLY
       },
+      professor_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        refereces: { model: 'People', key: 'id' }
+      },
+      level_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        refereces: { model: 'Levels', key: 'id' }
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
