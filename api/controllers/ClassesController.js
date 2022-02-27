@@ -29,6 +29,28 @@ class ClassesController {
             return res.status(500).json(error.message)
         }
     }
+
+    static async update(req, res){
+        const { id } = req.params
+        const data = req.body
+        try{
+            await database.update(data, { where: { id: Number(id)}})
+            const updatedClass = await database.findOne({ where: {id: Number(id)}})
+            return res.status(200).json(updatedClass)
+        } catch(error){
+            return res.status(500).json(error.message)
+        }
+    }
+
+    static async delete(req, res){
+        const { id } = req.params
+        try{
+            await database.destroy({ where: { id: Number(id)}})
+            res.status(200).json({ message: `id ${id} was deleted`})
+        } catch(error){
+            res.status(500).json(error.message)
+        }
+    }
 }
 
 module.exports = ClassesController

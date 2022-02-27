@@ -6,5 +6,7 @@ const router = Router()
 router.get('/classes', ClassesController.getAllClasses)
 router.get('/classes/:id', ClassesController.getClasses)
 router.post('/classes', ClassesController.createClass)
+router.put('/classes/:id', ClassesController.update)
+router.delete('/classes/:id', ClassesController.delete)
 
 module.exports = router
