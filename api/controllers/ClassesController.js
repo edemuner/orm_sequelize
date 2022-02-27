@@ -20,6 +20,15 @@ class ClassesController {
             return res.status(500).json(error.message)
         }
     }
+
+    static async createClass(req, res){
+        try{
+            const newClass = await database.create(req.body)
+            return res.status(200).json(newClass)
+        } catch(error){
+            return res.status(500).json(error.message)
+        }
+    }
 }
 
 module.exports = ClassesController
