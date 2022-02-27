@@ -1,4 +1,5 @@
 const database = require('../models').People
+const enrollmentDb = require('../models').Enrollments
 
 class PeopleController {
 
@@ -55,6 +56,21 @@ class PeopleController {
             await database.destroy({where:{id:id}})
             return res.status(200).json({ message: `id ${id} was deleted`})
         } catch(error){
+            return res.status(500).json(error.message)
+        }
+    }
+
+    static async getEnrollment(req, res){
+        const { studentId, enrollmentId } = req.params
+        try {
+            console.log(enrollmentDb)
+            const enrollment =  await enrollmentDb.findOne({ 
+                where: {
+                    id: Number(enrollmentId),
+                    student_id: Number(studentId)
+            } })
+            return res.status(200).json(enrollment)
+        } catch(error) {
             return res.status(500).json(error.message)
         }
     }
