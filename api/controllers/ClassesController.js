@@ -5,9 +5,19 @@ class ClassesController {
     static async getAllClasses(req, res){
         try{
             const classes = await database.findAll()
-            res.status(200).json(classes)
+            return res.status(200).json(classes)
         } catch(error){
-            res.status(500).json(error.message)
+            return res.status(500).json(error.message)
+        }
+    }
+
+    static async getClasses(req, res){
+        const { id } = req.params
+        try{
+            const oneClass = await database.findOne({ where: { id: Number(id)} })
+            return res.status(200).json(oneClass)
+        } catch(error){
+            return res.status(500).json(error.message)
         }
     }
 }
