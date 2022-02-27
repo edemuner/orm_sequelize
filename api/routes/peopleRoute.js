@@ -8,6 +8,8 @@ router.get('/people/:id', PeopleController.getPeople)
 router.post('/people', PeopleController.createPeople)
 router.put('/people/:id', PeopleController.update)
 router.delete('/people/:id', PeopleController.delete)
+
 router.get('/people/:studentId/enrollments/:enrollmentId', PeopleController.getEnrollment)
+router.post('/people/:studentId/enrollments', PeopleController.createEnrollment)
 
 module.exports = router
