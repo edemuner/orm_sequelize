@@ -1,4 +1,4 @@
-const database = require('../models').People
+const peopleDb = require('../models').People
 const enrollmentDb = require('../models').Enrollments
 
 class PeopleController {
@@ -6,7 +6,7 @@ class PeopleController {
     static async getAllPeople(req, res){
 
         try{
-            const allPeople = await database.findAll()
+            const allPeople = await peopleDb.findAll()
             return res.status(200).json(allPeople)
         } catch(error){
             return res.status(500).json(error)
@@ -16,7 +16,7 @@ class PeopleController {
     static async getPeople(req, res){
         const { id } = req.params
         try {
-            const person =  await database.findOne({ 
+            const person =  await peopleDb.findOne({ 
                 where: {
                     id: Number(id)
             } })
@@ -29,31 +29,31 @@ class PeopleController {
     static async createPeople(req, res){
         const newPerson = req.body
         try {
-            const createdPerson = await database.create(newPerson)
+            const createdPerson = await peopleDb.create(newPerson)
             return res.status(200).json(createdPerson)
         } catch(error){
             return res.status(500).json(error.message)
         }
     }
 
-    static async update(req, res){
+    static async updatePeople(req, res){
         const newData = req.body
         const { id } = req.params
         try {
-            await database.update(newData, { 
+            await peopleDb.update(newData, { 
                 where: { id: Number(id) }
              })
-             const updatedPerson = await database.findOne({where:{id:Number(id)}})
+             const updatedPerson = await peopleDb.findOne({where:{id:Number(id)}})
              return res.status(200).json(updatedPerson)
         } catch(error){
             return res.status(500).json(error.message)
         }
     }
 
-    static async delete(req, res){
+    static async deletePeople(req, res){
         const { id } = req.params
         try {
-            await database.destroy({where:{id:id}})
+            await peopleDb.destroy({where:{id:id}})
             return res.status(200).json({ message: `id ${id} was deleted`})
         } catch(error){
             return res.status(500).json(error.message)
@@ -81,6 +81,35 @@ class PeopleController {
         try {
             const createdEnrollment = await enrollmentDb.create(newEnrollment)
             return res.status(200).json(createdEnrollment)
+        } catch(error){
+            return res.status(500).json(error.message)
+        }
+    }
+
+    static async updateEnrollment(req, res){
+        const { studentId, enrollmentId } = req.params
+        const newData = req.body
+        try {
+            await enrollmentDb.update(newData, { 
+                where: { id: Number(enrollmentId), 
+                        student_id: Number(studentId) }
+             })
+             const updatedEnrollment = await enrollmentDb.findOne({where:{id:Number(enrollmentId)}})
+             return res.status(200).json(updatedEnrollment)
+        } catch(error){
+            return res.status(500).json(error.message)
+        }
+    }
+
+    static async deleteEnrollment(req, res){
+        const { studentId, enrollmentId } = req.params
+        try {
+            await enrollmentDb.destroy({
+                where:{
+                    id:enrollmentId,
+                    student_id:Number(studentId)
+                }})
+            return res.status(200).json({ message: `id ${enrollmentId} was deleted`})
         } catch(error){
             return res.status(500).json(error.message)
         }
