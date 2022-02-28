@@ -126,6 +126,19 @@ class PeopleController {
             return res.status(500).json(error.message)
         }
     }
+
+    static async restoreEnrollment(req, res){
+        const { studentId, enrollmentId } = req.params
+        try{
+            await enrollmentDb.restore({ where: {
+                id:Number(enrollmentId),
+                student_id: Number(studentId)
+            }})
+            return res.status(200).json({ message: `id ${enrollmentId} restored`})
+        } catch(error){
+            return res.status(500).json(error.message)
+        }
+    }
 }
 
 module.exports = PeopleController
