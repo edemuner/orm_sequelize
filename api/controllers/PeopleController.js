@@ -162,6 +162,31 @@ class PeopleController {
             return res.status(500).json(error.message)
         }
     }
+
+    static async getEnrollmentByClass(req, res){
+        const { classId } = req.params
+        try {
+
+            const allEnrollments = await enrollmentDb.findAndCountAll({
+                where: {
+                    class_id: Number(classId),
+                    status: 'confirmed'
+                },
+                limit:20,
+                order: [[ 'student_id', 'ASC' ]]
+            })
+            return res.status(200).json(allEnrollments.count)
+
+        //my solution
+        //     const aClass = await classDb.findOne({ where: {
+        //         id: Number(classId)
+        //     }})
+        //     const enrollments = await aClass.getEnrollments()
+        //     return res.status(200).json(enrollments)
+        } catch(error){
+            return res.status(500).json(error.message)
+        }
+    }
 }
 
 module.exports = PeopleController
