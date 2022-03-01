@@ -1,5 +1,6 @@
 const peopleDb = require('../models').People
 const enrollmentDb = require('../models').Enrollments
+const Sequelize = require('sequelize')
 
 class PeopleController {
 
@@ -183,6 +184,23 @@ class PeopleController {
         //     }})
         //     const enrollments = await aClass.getEnrollments()
         //     return res.status(200).json(enrollments)
+        } catch(error){
+            return res.status(500).json(error.message)
+        }
+    }
+
+    static async getFullClasses(req, res){
+        const full = 2
+        try {
+            const fullClasses = await enrollmentDb.findAndCountAll({
+                where: {
+                    status: 'confirmed'
+                },
+                attributes: ['class_id'],
+                group: ['class_id'],
+                having: Sequelize.literal(`count(class_id) >= ${full}`)
+            })
+            return res.status(200).json(fullClasses.count)
         } catch(error){
             return res.status(500).json(error.message)
         }
