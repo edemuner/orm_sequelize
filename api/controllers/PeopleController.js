@@ -3,10 +3,20 @@ const enrollmentDb = require('../models').Enrollments
 
 class PeopleController {
 
+    static async getAllActivePeople(req, res){
+
+        try{
+            const allActivePeople = await peopleDb.findAll()
+            return res.status(200).json(allActivePeople)
+        } catch(error){
+            return res.status(500).json(error)
+        }
+    }
+
     static async getAllPeople(req, res){
 
         try{
-            const allPeople = await peopleDb.findAll()
+            const allPeople = await peopleDb.scope('all').findAll()
             return res.status(200).json(allPeople)
         } catch(error){
             return res.status(500).json(error)
