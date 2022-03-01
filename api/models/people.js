@@ -15,7 +15,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'professor_id'
       })
       People.hasMany(models.Enrollments, {
-        foreignKey: 'student_id'
+        foreignKey: 'student_id',
+        scope: { status: 'confirmed' },
+        as: 'enrolledClasses'
+        // this alias is used to refer to the enrollments associated with a given person
+        // here it has a scope, but if only "as" was used, sequelize would return all enrollments, active and inactive
       })
     }
   }
