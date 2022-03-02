@@ -205,6 +205,19 @@ class PeopleController {
             return res.status(500).json(error.message)
         }
     }
+
+    static async cancelPeople(req, res){
+        const { studentId } = req.params
+        try {
+            await peopleDb
+            .update({ active: false }, { where: { id : Number(studentId) }})
+            await enrollmentDb
+            .update({ status: 'cancelled' }, { where: { student_id : Number(studentId) }})
+            return res.status(200).json({ message: `student ${studentId} and related enrollments were canceled`})
+        } catch(error){
+            return res.status(500).json(error.message)
+        }
+    }
 }
 
 module.exports = PeopleController

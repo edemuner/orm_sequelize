@@ -19,7 +19,7 @@ router.post('/people/:studentId/enrollments', PeopleController.createEnrollment)
 router.put('/people/:studentId/enrollments/:enrollmentId', PeopleController.updateEnrollment)
 router.delete('/people/:studentId/enrollments/:enrollmentId', PeopleController.deleteEnrollment)
 router.post('/people/:studentId/enrollments/:enrollmentId/restore', PeopleController.restoreEnrollment)
-
+router.post('/people/:studentId/cancel', PeopleController.cancelPeople)
 
 
 module.exports = router
