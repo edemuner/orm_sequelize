@@ -2,8 +2,8 @@
 // const enrollmentDb = require('../models').Enrollments
 // const Sequelize = require('sequelize')
 
-const Services = require('../services/Services')
-const peopleServices = new Services('People')
+const {PeopleServices} = require('../services')
+const peopleServices = new PeopleServices()
 
 class PeopleController {
 

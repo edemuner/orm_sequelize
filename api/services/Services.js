@@ -8,8 +8,23 @@ class Services {
     }
 
     async getAllRegisters(){
-        console.log('oi')
         return database[this.modelName].findAll()
+    }
+
+    async getOneRegister(id){
+
+    }
+
+    async createRegister(data){
+
+    }
+
+    async updateRegister(updatedData, id){
+
+    }
+
+    async removeRegister(id){
+
     }
 }
 
