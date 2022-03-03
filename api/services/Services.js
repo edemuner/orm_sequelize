@@ -19,8 +19,14 @@ class Services {
 
     }
 
-    async updateRegister(updatedData, id){
+    async updateRegister(updatedData, id, transaction={}){
+        return database[this.modelName]
+        .update(updatedData, { where: {id:id}}, transaction)
+    }
 
+    async updateRegisters(updatedData, where, transaction={}){
+        return database[this.modelName]
+        .update(updatedData, { where: {...where}}, transaction)
     }
 
     async removeRegister(id){
