@@ -30,7 +30,12 @@ class PeopleServices extends Services {
                 transaction: transaction
             })
         })
+    }
 
+    async getEnrollmentsByStudent(studentId){
+        const person = await database[this.modelName].findOne({where:
+            {id:studentId}})
+        return person.getEnrolledClasses()
     }
 
 

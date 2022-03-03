@@ -1,9 +1,10 @@
-// const peopleDb = require('../models').People
+const peopleDb = require('../models').People
 // const enrollmentDb = require('../models').Enrollments
 // const Sequelize = require('sequelize')
 
-const {PeopleServices} = require('../services')
+const {PeopleServices, EnrollmentServices} = require('../services')
 const peopleServices = new PeopleServices()
+const enrollmentServices = new EnrollmentServices()
 
 class PeopleController {
 
@@ -82,11 +83,8 @@ class PeopleController {
     static async getEnrollment(req, res){
         const { studentId, enrollmentId } = req.params
         try {
-            const enrollment =  await enrollmentDb.findOne({ 
-                where: {
-                    id: Number(enrollmentId),
-                    student_id: Number(studentId)
-            } })
+            const enrollment =  await enrollmentServices
+                .getEnrollmentRegister(Number(studentId), Number(enrollmentId))
             return res.status(200).json(enrollment)
         } catch(error) {
             return res.status(500).json(error.message)
@@ -97,7 +95,7 @@ class PeopleController {
         const { studentId } = req.params
         const newEnrollment = {...req.body, student_id: Number(studentId) }
         try {
-            const createdEnrollment = await enrollmentDb.create(newEnrollment)
+            const createdEnrollment = await enrollmentServices.createRegister(newEnrollment)
             return res.status(200).json(createdEnrollment)
         } catch(error){
             return res.status(500).json(error.message)
@@ -108,11 +106,12 @@ class PeopleController {
         const { studentId, enrollmentId } = req.params
         const newData = req.body
         try {
-            await enrollmentDb.update(newData, { 
-                where: { id: Number(enrollmentId), 
-                        student_id: Number(studentId) }
+            await enrollmentServices.updateRegisters(newData, 
+                    { id: Number(enrollmentId), 
+                    student_id: Number(studentId) 
              })
-             const updatedEnrollment = await enrollmentDb.findOne({where:{id:Number(enrollmentId)}})
+             const updatedEnrollment = await enrollmentServices
+                            .getEnrollmentRegister(Number(studentId), Number(enrollmentId))
              return res.status(200).json(updatedEnrollment)
         } catch(error){
             return res.status(500).json(error.message)
@@ -122,11 +121,7 @@ class PeopleController {
     static async deleteEnrollment(req, res){
         const { studentId, enrollmentId } = req.params
         try {
-            await enrollmentDb.destroy({
-                where:{
-                    id:enrollmentId,
-                    student_id:Number(studentId)
-                }})
+            await enrollmentServices.deleteEnrollmentRegister(Number(studentId), Number(enrollmentId))
             return res.status(200).json({ message: `id ${enrollmentId} was deleted`})
         } catch(error){
             return res.status(500).json(error.message)
@@ -136,10 +131,7 @@ class PeopleController {
     static async restoreEnrollment(req, res){
         const { studentId, enrollmentId } = req.params
         try{
-            await enrollmentDb.restore({ where: {
-                id:Number(enrollmentId),
-                student_id: Number(studentId)
-            }})
+            await enrollmentServices.restoreEnrollmentRegister(Number(studentId), Number(enrollmentId))
             return res.status(200).json({ message: `id ${enrollmentId} restored`})
         } catch(error){
             return res.status(500).json(error.message)
@@ -149,10 +141,7 @@ class PeopleController {
     static async getEnrollmentByStudent(req, res){
         const { studentId } = req.params
         try {
-            const person = await peopleDb.findOne({ where: {
-                id: Number(studentId)
-            }})
-            const enrollments = await person.getEnrolledClasses()
+            const enrollments = await peopleServices.getEnrollmentsByStudent(Number(studentId))
             return res.status(200).json(enrollments)
         } catch(error){
             return res.status(500).json(error.message)
