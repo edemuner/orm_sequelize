@@ -30,10 +30,7 @@ class PeopleController {
     static async getPeople(req, res){
         const { id } = req.params
         try {
-            const person =  await peopleDb.findOne({ 
-                where: {
-                    id: Number(id)
-            } })
+            const person =  await peopleServices.getOneRegister(Number(id))
             return res.status(200).json(person)
         } catch(error) {
             return res.status(500).json(error.message)
@@ -43,7 +40,7 @@ class PeopleController {
     static async createPeople(req, res){
         const newPerson = req.body
         try {
-            const createdPerson = await peopleDb.create(newPerson)
+            const createdPerson = await peopleServices.createRegister(newPerson)
             return res.status(200).json(createdPerson)
         } catch(error){
             return res.status(500).json(error.message)
@@ -54,10 +51,8 @@ class PeopleController {
         const newData = req.body
         const { id } = req.params
         try {
-            await peopleDb.update(newData, { 
-                where: { id: Number(id) }
-             })
-             const updatedPerson = await peopleDb.findOne({where:{id:Number(id)}})
+            await peopleServices.updateRegister(newData, Number(id))
+             const updatedPerson = await peopleServices.getOneRegister(Number(id))
              return res.status(200).json(updatedPerson)
         } catch(error){
             return res.status(500).json(error.message)
@@ -67,7 +62,7 @@ class PeopleController {
     static async deletePeople(req, res){
         const { id } = req.params
         try {
-            await peopleDb.destroy({where:{id:id}})
+            await peopleServices.removeRegister(Number(id))
             return res.status(200).json({ message: `id ${id} was deleted`})
         } catch(error){
             return res.status(500).json(error.message)
@@ -77,9 +72,7 @@ class PeopleController {
     static async restorePeople(req, res){
         const { id } = req.params
         try{
-            await peopleDb.restore({ where: {
-                id:Number(id)
-            }})
+            await peopleServices.restoreRegister(Number(id))
             return res.status(200).json({ message: `id ${id} restored`})
         } catch(error){
             return res.status(500).json(error.message)
@@ -89,7 +82,6 @@ class PeopleController {
     static async getEnrollment(req, res){
         const { studentId, enrollmentId } = req.params
         try {
-            console.log(enrollmentDb)
             const enrollment =  await enrollmentDb.findOne({ 
                 where: {
                     id: Number(enrollmentId),

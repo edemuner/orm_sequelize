@@ -12,11 +12,11 @@ class Services {
     }
 
     async getOneRegister(id){
-
+        return database[this.modelName].findAll({where: {id:id}})
     }
 
     async createRegister(data){
-
+        return database[this.modelName].create(data)
     }
 
     async updateRegister(updatedData, id, transaction={}){
@@ -30,7 +30,11 @@ class Services {
     }
 
     async removeRegister(id){
+        return database[this.modelName].destroy({where: {id:id}})
+    }
 
+    async restoreRegister(id){
+        return database[this.modelName].restore({where:{id:id}})
     }
 }
 
