@@ -83,7 +83,7 @@ class PeopleController {
         const { studentId, enrollmentId } = req.params
         try {
             const enrollment =  await enrollmentServices
-                .getEnrollmentRegister(Number(studentId), Number(enrollmentId))
+                .getOneRegister(Number(studentId), Number(enrollmentId))
             return res.status(200).json(enrollment)
         } catch(error) {
             return res.status(500).json(error.message)
@@ -120,7 +120,7 @@ class PeopleController {
     static async deleteEnrollment(req, res){
         const { studentId, enrollmentId } = req.params
         try {
-            await enrollmentServices.deleteEnrollmentRegister(Number(studentId), Number(enrollmentId))
+            await enrollmentServices.removeRegister(Number(studentId), Number(enrollmentId))
             return res.status(200).json({ message: `id ${enrollmentId} was deleted`})
         } catch(error){
             return res.status(500).json(error.message)
@@ -130,7 +130,7 @@ class PeopleController {
     static async restoreEnrollment(req, res){
         const { studentId, enrollmentId } = req.params
         try{
-            await enrollmentServices.restoreEnrollmentRegister(Number(studentId), Number(enrollmentId))
+            await enrollmentServices.restoreRegister(Number(studentId), Number(enrollmentId))
             return res.status(200).json({ message: `id ${enrollmentId} restored`})
         } catch(error){
             return res.status(500).json(error.message)

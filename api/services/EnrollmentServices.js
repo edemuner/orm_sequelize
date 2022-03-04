@@ -10,7 +10,7 @@ class EnrollmentServices extends Services {
         super('Enrollments')
     }
 
-    async getEnrollmentRegister(studentId, enrollmentId){
+    async getOneRegister(studentId, enrollmentId){
         return database[this.modelName].findAll({
             where: {
                 student_id: studentId,
@@ -18,7 +18,7 @@ class EnrollmentServices extends Services {
             }})
     }
 
-    async deleteEnrollmentRegister(studentId, enrollmentId){
+    async removeRegister(studentId, enrollmentId){
         return database[this.modelName].destroy({
             where: {
                 student_id: studentId,
@@ -27,7 +27,7 @@ class EnrollmentServices extends Services {
         })
     }
 
-    async restoreEnrollmentRegister(studentId, enrollmentId){
+    async restoreRegister(studentId, enrollmentId){
         return database[this.modelName].restore({
             where: {
                 student_id: studentId,
