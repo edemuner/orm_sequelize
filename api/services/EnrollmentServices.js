@@ -1,5 +1,7 @@
 const Services = require('./Services')
 const database = require('../models')
+const Sequelize = require('sequelize')
+
 
 
 class EnrollmentServices extends Services {
@@ -34,8 +36,27 @@ class EnrollmentServices extends Services {
         })
     }
 
-    async getRegisterByStudent(studentId){
-        return database[this.modelName].getEnrolledClasses()
+    async getEnrollmentRegisterByClass(classId){
+        return database[this.modelName].findAndCountAll({
+            where: {
+                class_id: Number(classId),
+                status: 'confirmed'
+            },
+            limit:20,
+            order: [[ 'student_id', 'ASC' ]]
+        })
+    }
+
+    async getFullClasses(){
+        const full = 2
+        return database[this.modelName].findAndCountAll({
+            where: {
+                status: 'confirmed'
+            },
+            attributes: ['class_id'],
+            group: ['class_id'],
+            having: Sequelize.literal(`count(class_id) >= ${full}`)
+        })
     }
 }
 

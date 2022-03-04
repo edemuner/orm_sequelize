@@ -1,6 +1,5 @@
-const peopleDb = require('../models').People
+// const peopleDb = require('../models').People
 // const enrollmentDb = require('../models').Enrollments
-// const Sequelize = require('sequelize')
 
 const {PeopleServices, EnrollmentServices} = require('../services')
 const peopleServices = new PeopleServices()
@@ -151,18 +150,11 @@ class PeopleController {
     static async getEnrollmentByClass(req, res){
         const { classId } = req.params
         try {
+            const allEnrollments = await enrollmentServices
+                .getEnrollmentRegisterByClass(classId)
+            return res.status(200).json(allEnrollments)
 
-            const allEnrollments = await enrollmentDb.findAndCountAll({
-                where: {
-                    class_id: Number(classId),
-                    status: 'confirmed'
-                },
-                limit:20,
-                order: [[ 'student_id', 'ASC' ]]
-            })
-            return res.status(200).json(allEnrollments.count)
-
-        //my solution
+        //my solution (doesn't fit all requisites)
         //     const aClass = await classDb.findOne({ where: {
         //         id: Number(classId)
         //     }})
@@ -174,16 +166,8 @@ class PeopleController {
     }
 
     static async getFullClasses(req, res){
-        const full = 2
         try {
-            const fullClasses = await enrollmentDb.findAndCountAll({
-                where: {
-                    status: 'confirmed'
-                },
-                attributes: ['class_id'],
-                group: ['class_id'],
-                having: Sequelize.literal(`count(class_id) >= ${full}`)
-            })
+            const fullClasses = await enrollmentServices.getFullClasses()
             return res.status(200).json(fullClasses.count)
         } catch(error){
             return res.status(500).json(error.message)
