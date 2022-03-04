@@ -7,8 +7,8 @@ class Services {
         this.modelName = modelName
     }
 
-    async getAllRegisters(){
-        return database[this.modelName].findAll()
+    async getAllRegisters(where={}){
+        return database[this.modelName].findAll(where)
     }
 
     async getOneRegister(id){
