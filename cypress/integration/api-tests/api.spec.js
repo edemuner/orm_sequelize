@@ -1,6 +1,8 @@
 
+
 const NEWCLASS = {start_date: "2022-04-01", professor_id: 1,level_id: 1}
 const UPDATECLASS = {professor_id:2, level_id:2}
+const NONEXISTINGCLASS = 100000000000000000000000000000000000000000
 
 describe('Classes routes testing', () => {
     
@@ -45,6 +47,17 @@ describe('Classes routes testing', () => {
                 expect(res.body[0].id).to.eq(id)
             }                
             )
+        })
+    })
+
+    it('get non existing class should return empty array', () => {
+        cy.request({
+            method:'GET',
+            url:`/classes/${NONEXISTINGCLASS}`
+        }).should(res => {
+            assert.isArray(res.body)
+            expect(res.status).to.eq(200)
+            expect(res.body.length).to.eq(0)
         })
     })
 
