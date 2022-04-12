@@ -68,5 +68,22 @@ describe('Classes routes testing', () => {
         })
     })
 
+    it('delete /classes/:id should return correctly', () => {
+        cy.request({
+            method:'POST',
+            url:'/classes',
+            body:NEWCLASS
+        }).then(res => {
+            const id = res.body.id
+            cy.request({
+                method:'DELETE',
+                url: `/classes/${id}`,
+            }).should(res => {
+                expect(res.status).to.eq(200)
+                expect(res.body.message).to.eq(`id ${id} was deleted`)
+            })
+        })
+    })
+
 
 })
