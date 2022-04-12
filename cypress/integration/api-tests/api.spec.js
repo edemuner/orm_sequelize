@@ -25,4 +25,24 @@ describe('Classes routes testing', () => {
 
         } )
     })
+
+    it('get /classes/:id should return correctly', () => {
+        cy.request({
+            method:'POST',
+            url:'/classes',
+            body:NEWCLASS
+        }).then(res => {
+            const id = res.body.id
+            cy.request({
+                method:'GET',
+                url:`/classes/${id}`
+            }).should(res => {
+                 assert.isArray(res.body)
+                expect(res.status).to.eq(200)
+                expect(res.body[0]).to.have.all.keys('id', 'start_date', 'updatedAt', 'createdAt', 'deletedAt', 'professor_id', 'level_id')
+                expect(res.body[0].id).to.eq(id)
+            }                
+            )
+        })
+    })
 })
