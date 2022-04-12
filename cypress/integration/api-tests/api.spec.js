@@ -73,7 +73,8 @@ describe('Classes routes testing', () => {
             method:'POST',
             url:'/classes',
             body:NEWCLASS
-        }).then(res => {
+        }).as('postReq')
+        cy.get('@postReq').then(res => {
             const id = res.body.id
             cy.request({
                 method:'DELETE',
@@ -81,6 +82,12 @@ describe('Classes routes testing', () => {
             }).should(res => {
                 expect(res.status).to.eq(200)
                 expect(res.body.message).to.eq(`id ${id} was deleted`)
+                cy.request({
+                    method:'GET',
+                    url:`/classes/${id}`
+                }).then(res => {
+                    expect(res.body.deletedAt).to.not.eq(null)
+                })
             })
         })
     })
